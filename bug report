@@ -1,0 +1,53 @@
+# Bug Report — Out-of-Stock Concurrency Issue
+
+**Title**: Order placed and payment charged for out-of-stock item during concurrent checkout
+
+**Severity**: Critical
+**Priority**: High
+
+**Steps to Reproduce**:
+1. Ensure Item X has exactly 1 unit in stock
+2. User A adds Item X to cart and proceeds to checkout
+3. In parallel, User B completes checkout for Item X first, reducing stock to 0
+4. User A, unaware stock changed, clicks "Place Order"
+
+**Expected Result**:
+The system should detect that Item X is now out of stock before finalizing User A's order, block the order, and display a clear message — without charging payment.
+
+**Actual Result**:
+User A's payment is charged and an order ID is generated despite the item having zero stock at the time of order placement.
+
+**Environment**:
+Staging, Chrome 128, test accounts: userA@test.com / userB@test.com
+
+**Attachments**:
+Screenshot of User A's order confirmation page; backend inventory log showing stock = 0 at time of order.
+
+**Notes**:
+This is a race-condition bug — the stock check and the payment/order-creation step are not happening atomically. Recommend the backend team review whether stock validation occurs within the same transaction as order creation, or as a separate, earlier check that can go stale under concurrent load.
+
+---
+
+# Bug Report — Login Error Message Reveals Account Existence
+
+**Title**: Login error message differs between "wrong password" and "email not registered," revealing account existence
+
+**Severity**: Medium
+**Priority**: Medium
+
+**Steps to Reproduce**:
+1. Attempt login with a registered email and an incorrect password — note the error message
+2. Attempt login with a non-existent email and any password — note the error message
+3. Compare the two messages
+
+**Expected Result**:
+Both cases should return an identical, generic error message (e.g., "Invalid email or password") so that an attacker cannot determine whether a given email is registered in the system.
+
+**Actual Result**:
+The messages differ, allowing user enumeration — a security best-practice violation (relates to OWASP's Broken Authentication category).
+
+**Environment**:
+Staging, Chrome 128, test account: test@example.com
+
+**Notes**:
+Recommend aligning both error paths to return the same generic message and status, regardless of which condition (wrong password vs. unregistered email) triggered the failure.
