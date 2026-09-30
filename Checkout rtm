@@ -1,0 +1,15 @@
+# Requirement Traceability Matrix — Checkout Flow
+
+| Req ID | Requirement | Test Case IDs | Coverage Status |
+|---|---|---|---|
+| REQ-01 | User can apply a valid coupon code and see the discount reflected in the order total | TC_001 | Covered |
+| REQ-02 | Expired or invalid coupon codes are rejected with a clear error message | TC_002 | Covered |
+| REQ-03 | Orders cannot be placed for items that are out of stock at the time of order placement | TC_003 | Covered |
+| REQ-04 | Failed payments do not result in an order being created or inventory being deducted | TC_004 | Covered |
+| REQ-05 | Users cannot proceed to checkout with an empty cart | TC_005 | Covered |
+| REQ-06 | Cash on Delivery is only available above the defined minimum order value | TC_006 | Covered |
+| REQ-07 | Address fields are validated for correct format before allowing checkout to proceed | TC_007 | Covered |
+| REQ-08 | Order confirmation email is sent upon successful order placement | TC_001 (partial) | Partially Covered — needs a dedicated test case verifying email delivery/content specifically |
+
+## Notes
+- REQ-08 is flagged as partially covered — TC_001 confirms the order succeeds but doesn't dedicate specific verification steps to the email's content or delivery timing. This gap was intentionally called out rather than silently left uncovered, demonstrating how an RTM is used to catch coverage holes before release sign-off.
