@@ -1,0 +1,1 @@
+Aspiring QA Engineer building foundational skills in manual and automated testing. This repository showcases test artifacts I've created through focused, self-directed practice — covering the full testing process from requirement analysis through test design, execution, and bug reporting.
