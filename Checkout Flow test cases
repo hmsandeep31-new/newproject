@@ -1,0 +1,18 @@
+ Test Cases — E-Commerce Checkout Flow
+
+| ID | Title | Precondition | Steps | Expected Result | Priority |
+
+| TC_001 | Successful checkout with valid coupon | User logged in; cart has 1 item in stock; coupon "SAVE10" active | 1. Go to Cart 2. Proceed to Checkout 3. Select saved address 4. Enter coupon "SAVE10", Apply 5. Select Credit Card 6. Enter valid card details 7. Place Order | Discount reflected in total; order placed successfully; confirmation page shows order ID; confirmation email sent | High |
+| TC_002 | Checkout fails with expired coupon code | Coupon "EXPIRED20" has passed its validity date | 1. Go to Checkout with items in cart 2. Enter coupon "EXPIRED20" 3. Click Apply | Error shown: "This coupon has expired"; no discount applied; order total unchanged | Medium |
+| TC_003 | Item goes out of stock during checkout (concurrency) | Item X has 1 unit in stock; two users have it in cart simultaneously | 1. User A adds item X, proceeds to checkout 2. User B completes checkout for item X first 3. User A clicks "Place Order" | User A sees "Item X is now out of stock"; not charged; cart updated | High |
+| TC_004 | Payment gateway failure handling | Use a sandbox card number known to trigger a decline | 1. Proceed to checkout with valid cart 2. Enter the decline-triggering test card 3. Click Place Order | Clear failure message shown; no order created; inventory not deducted; user returned to payment step | Critical |
+| TC_005 | Empty cart checkout attempt | Cart is empty | 1. Navigate directly to checkout URL | User redirected to empty-cart page or shown "Your cart is empty"; not allowed to proceed to payment | Medium |
+| TC_006 | Boundary: COD available exactly at minimum order value | COD requires order value ≥ ₹200 | Test order values of ₹199, ₹200, ₹201 | ₹199 → COD disabled with message; ₹200 and ₹201 → COD available | Medium |
+| TC_007 | Field validation: invalid pincode format | User is on address entry step | Enter alphabetic characters or a 3-digit number in pincode, try to proceed | Inline validation error shown immediately; Continue button stays disabled until corrected | Low |
+
+
+
+ Notes on Test Design
+- **TC_003** and **TC_004** use error guessing and risk-based prioritization — these are the highest-impact failure points (money and inventory integrity) and were prioritized accordingly.
+- **TC_006** applies Boundary Value Analysis — testing directly at, just below, and just above the stated business rule threshold rather than an arbitrary mid-range value.
+- All test cases were designed after identifying test scenarios first (broad coverage sweep), then converting the highest-priority scenarios into fully detailed test cases.
